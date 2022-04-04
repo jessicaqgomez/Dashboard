@@ -43,5 +43,31 @@ if __name__ == '__main__':
         {'name': 'ambiente', 'id': 'ambiente', 'type': 'text'},
         {'name': 'base_de_datos', 'id': 'base_de_datos', 'type': 'text'},
     ]
-    Dash.app.layout = dash_table.DataTable(data,columns=columnas,filter_action='native')
+    Dash.app.layout = dash_table.DataTable(data,columns=columnas,filter_action='native', style_data_conditional=[
+        {
+            'if': {
+                'column_id': 'status',
+                'filter_query': '{status} eq "PASS"',
+
+            },
+            'backgroundColor': '#bbff54'
+        },
+        {
+            'if': {
+                'column_id': 'status',
+                'filter_query': '{status} eq "FAIL"',
+
+            },
+            'backgroundColor': '#fd7057'
+        },
+        {
+            'if': {
+                'column_id': 'status',
+                'filter_query': '{status} eq "NOT RUN"',
+
+            },
+            'backgroundColor': '#f9dd46'
+        },
+
+    ])
     Dash.app.run_server(debug=True)
