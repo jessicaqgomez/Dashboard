@@ -27,23 +27,25 @@ class DashboardNetoffice():
             temp = {}
             Comprobantes = ""
         return lista
+    def get_columns(self):
+        columnas = [
+            {'name': 'id', 'id': 'id', 'type': 'numeric'},
+            {'name': 'scenario', 'id': 'scenario', 'type': 'text'},
+            {'name': 'execution_date', 'id': 'execution_date', 'type': 'datetime'},
+            {'name': 'status', 'id': 'status', 'type': 'text'},
+            {'name': 'execution_duration_minutes', 'id': 'execution_duration_minutes', 'type': 'numeric'},
+            {'name': 'comprobantes', 'id': 'comprobantes', 'type': 'text'},
+            {'name': 'journal_id', 'id': 'journal_id', 'type': 'text'},
+            {'name': 'ambiente', 'id': 'ambiente', 'type': 'text'},
+            {'name': 'base_de_datos', 'id': 'base_de_datos', 'type': 'text'},
+        ]
+        return columnas
 
 if __name__ == '__main__':
     Dash = DashboardNetoffice()
     data = Dash.get_data()
-    #columns = ['id','scenario','execution_date','status','execution_duration_minutes','comprobantes','journal_id','ambiente','base_de_datos']
-    columnas = [
-        {'name': 'id', 'id': 'id', 'type': 'numeric'},
-        {'name': 'scenario', 'id': 'scenario', 'type': 'text'},
-        {'name': 'execution_date', 'id': 'execution_date', 'type': 'datetime'},
-        {'name': 'status', 'id': 'status', 'type': 'text'},
-        {'name': 'execution_duration_minutes', 'id': 'execution_duration_minutes', 'type': 'numeric'},
-        {'name': 'comprobantes', 'id': 'comprobantes', 'type': 'text'},
-        {'name': 'journal_id', 'id': 'journal_id', 'type': 'text'},
-        {'name': 'ambiente', 'id': 'ambiente', 'type': 'text'},
-        {'name': 'base_de_datos', 'id': 'base_de_datos', 'type': 'text'},
-    ]
-    Dash.app.layout = dash_table.DataTable(data,columns=columnas,filter_action='native', style_data_conditional=[
+    columns = Dash.get_columns()
+    Dash.app.layout = dash_table.DataTable(data,columns=columns,filter_action='native', style_data_conditional=[
         {
             'if': {
                 'column_id': 'status',
