@@ -1,6 +1,7 @@
 from dash import Dash, dash_table
 import pandas as pd
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
+import datetime
 
 class DashboardNetoffice():
     def __init__(self):
@@ -18,11 +19,22 @@ class DashboardNetoffice():
         for i in table:
             for key, value in i.items():
                 if value != '' and key not in comprobantes:
-                    temp[key] = value
+
+                    if key == 'execution_date':
+                        temp[key] = value.date()
+                    elif key == 'execution_duration_minutes':
+                        hours, minutes = divmod(value, 3600)
+                        minutes, seconds = divmod(minutes, 60)
+                        result = "{:02.0f}:{:02.0f}:{:02.0f}".format(hours, minutes, seconds)
+                        temp[key] = result
+                    else:
+                        temp[key] = value
                 elif key in comprobantes and value != '' and value is not None:
                     Comprobantes = Comprobantes  + str(key) + ": " + str(value)+ " | "
                     temp["comprobantes"] = Comprobantes.strip("|").strip().rstrip(" | ")
+
             #print(temp)
+            #print("-------------------------------------------")
             lista.append(temp)
             temp = {}
             Comprobantes = ""
@@ -31,13 +43,13 @@ class DashboardNetoffice():
         columnas = [
             {'name': 'id', 'id': 'id', 'type': 'numeric'},
             {'name': 'scenario', 'id': 'scenario', 'type': 'text'},
-            {'name': 'execution_date', 'id': 'execution_date', 'type': 'datetime'},
+            {'name': ' fecha de ejecución ', 'id': 'execution_date', 'type': 'datetime'},
             {'name': 'status', 'id': 'status', 'type': 'text'},
-            {'name': 'execution_duration_minutes', 'id': 'execution_duration_minutes', 'type': 'numeric'},
+            {'name': 'tiempo de duración', 'id': 'execution_duration_minutes', 'type': 'numeric'},
             {'name': 'comprobantes', 'id': 'comprobantes', 'type': 'text'},
-            {'name': 'journal_id', 'id': 'journal_id', 'type': 'text'},
+            {'name': 'journal id', 'id': 'journal_id', 'type': 'text'},
             {'name': 'ambiente', 'id': 'ambiente', 'type': 'text'},
-            {'name': 'base_de_datos', 'id': 'base_de_datos', 'type': 'text'},
+            {'name': 'base de datos', 'id': 'base_de_datos', 'type': 'text'},
         ]
         return columnas
 
